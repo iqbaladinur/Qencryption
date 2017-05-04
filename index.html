@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Color theme for statusbar -->
+    <meta name="theme-color" content="#2196f3">
+    <link href='./icon.png' rel='apple-touch-icon' type='image/png'>
+	<link href='./icon.png' rel='apple-touch-icon' sizes='72x72'>
+	<link href='./icon.png' rel='apple-touch-icon' sizes='114x114'>
+	<link rel="icon" type="image/png" href="./icon.png" sizes="160x160">
+	<title>Qencript</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<style type="text/css">
+		 html, body, .container-table {
+		    height: 100%;
+		}
+		body{
+			background-color: #f5f5f5;
+		}
+		.container-table {
+		    display: table;
+		}
+		.vertical-center-row {
+		    display: table-cell;
+		    vertical-align: middle;
+		}
+	</style>
+</head>
+<body >
+	<div class="container container-table">
+	    <div class="row vertical-center-row">
+	        <div class="text-center col-md-6 col-md-offset-3" style="background-color: #e7e7e7; border: 1px solid #e7e7e7; border-radius:3px; padding: 0px 30px 30px 30px">
+	        	<h3 style="color: gray">Algoritma Qencryption</h3><br>
+	        	<div class="form-group">
+	        		<textarea id="input" class="form-control" style="height: 150px">Paste Text Here..</textarea>	
+	        	</div>
+	        	<div class="row">
+	        		<div class="form-group col-md-6">
+		        		<input id="key" type="text" class="form-control" placeholder="Key..">
+		        	</div>
+		        	<div class="form-group col-md-3 text-right">
+		        		<button id="btn_decrypt" class="btn btn-warning form-control">Decrypt</button>
+		        	</div>
+		        	<div class="form-group col-md-3 text-right">
+		        		<button id="btn_enkrip" class="btn btn-info form-control">Encrypt</button>
+		        	</div>
+	        	</div>
+	        	<a target="_blank" href="https://github.com/iqbaladinur/Qencryption.git">Download SourceCode</a>
+	        </div>
+	    </div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	$( document ).ready(function() {
+		$("#input").focus(function () {
+			$(this).select();	
+		});
+
+		$("#key").focus(function () {
+			$(this).select();	
+		});
+
+    	$("#btn_enkrip").click(function (){
+    		var url = "./service_worker/enkripsi.php?input="+$("#input").val();
+    		$.ajax({
+		        type:'GET',
+		        url : url,
+		        beforeSend: function () {
+		            console.log("beforeSend");
+		        },
+		        success: function (data) {
+		        	var nilai = JSON.parse(data);
+		        	if (nilai.status) {
+		        		$("#input").val(nilai.encrypted_text);
+		        		$("#key").val(nilai.key);
+		        	}else{
+		        		alert('failed!');
+		        	}
+		        }
+	    	});
+    	});
+
+    	$("#btn_decrypt").click(function () {
+    		var string = $("#input").val();
+    		var key    = $("#key").val();
+    		var url ="./service_worker/dekripsi.php";
+    		$.ajax({
+		        type:'POST',
+		        url : url,
+		        data: {string: string, key: key},
+		        contentType: "application/x-www-form-urlencoded",
+		        beforeSend: function(){
+		            console.log("beforeSend");
+		        },
+		        success: function (data) {
+		        	var nilai = JSON.parse(data);
+		        	if (nilai.status) {
+		        		$("#input").val(nilai.decripted_text);
+		        		$("#key").val("");
+		        	}else{
+		        		alert('failed!');
+		        	}
+		        }
+	    	});
+    	});
+	});
+</script>
