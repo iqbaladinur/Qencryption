@@ -39,6 +39,10 @@
 	        	<div class="form-group">
 	        		<textarea id="input" class="form-control" style="height: 150px">Paste Text Here..</textarea>	
 	        	</div>
+	        	<div class="progress">
+					<div id="proses_bar" class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+					</div>
+				</div>
 	        	<div class="row">
 	        		<div class="form-group col-md-6">
 		        		<input id="key" type="text" class="form-control" placeholder="Key..">
@@ -72,15 +76,17 @@
 		        type:'GET',
 		        url : url,
 		        beforeSend: function () {
-		            console.log("beforeSend");
+		            $("#proses_bar").addClass('active').html("loading..");
 		        },
 		        success: function (data) {
 		        	var nilai = JSON.parse(data);
 		        	if (nilai.status) {
 		        		$("#input").val(nilai.encrypted_text);
 		        		$("#key").val(nilai.key);
+		        		$("#proses_bar").removeClass('active').html("");
 		        	}else{
 		        		alert('failed!');
+		        		$("#proses_bar").removeClass('active').html("");
 		        	}
 		        }
 	    	});
@@ -96,15 +102,17 @@
 		        data: {string: string, key: key},
 		        contentType: "application/x-www-form-urlencoded",
 		        beforeSend: function(){
-		            console.log("beforeSend");
+		             $("#proses_bar").addClass('active').html("loading..");
 		        },
 		        success: function (data) {
 		        	var nilai = JSON.parse(data);
 		        	if (nilai.status) {
 		        		$("#input").val(nilai.decripted_text);
 		        		$("#key").val("");
+		        		$("#proses_bar").removeClass('active').html("");
 		        	}else{
 		        		alert('failed!');
+		        		$("#proses_bar").removeClass('active').html("");
 		        	}
 		        }
 	    	});
