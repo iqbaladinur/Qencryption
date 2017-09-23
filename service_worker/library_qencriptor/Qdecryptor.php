@@ -3,7 +3,8 @@
 * Qencrypt Decryptor
 * @author iqbaladi 
 */
-require 'Qencrypt.php';
+include 'Qencrypt.php';
+use Qencrypt;
 
 class Qdecryptor extends Qencrypt{
 	private $string_encripted;
